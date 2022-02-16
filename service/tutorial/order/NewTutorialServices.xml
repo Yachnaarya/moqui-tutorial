@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+
+    <!--1.Finding all Person records for all females-->
+    <service verb="get" noun="FemalePersons">
+        <in-parameters>
+            <parameter name="gender" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="personList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personList">
+                <econdition field-name="gender"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- 2.Listing  the Person details with MarsMarried marital status.-->
+
+    <service verb="get" noun="Persons">
+        <in-parameters>
+            <parameter name="maritalStatusEnumId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="personList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personList">
+                <econdition field-name="maritalStatusEnumId"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- 3.Finding all Order Header records so that the latest placed order appears at the top-->
+
+    <service verb="get" noun="LatestOrders">
+        <out-parameters>
+            <parameter name="ordersList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
+                <order-by field-name="placedDate"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- 4.Finding the Order Header details for a given orderId.-->
+
+    <service verb="get" noun="Order">
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderDetails" type="list"/>
+            <parameter name="orderId"/>
+            <parameter name="orderName"/>
+            <parameter name="placedDate"/>
+            <parameter name="statusId"/>
+            <parameter name="orderRevision"/>
+            <parameter name="currencyUomId"/>
+            <parameter name="productStoreId"/>
+            <parameter name="salesChannelEnumId"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
+            <set field="products" from="[]"/>
+
+            <if condition="placedDate">
+                <then>
+                    <set field="orderId" from="product.orderId"/>
+                    <set field="orderName" from="product.orderName"/>
+                    <set field="placedDate" from="product.placedDate"/>
+                    <set field="statusId" from="product.statusId"/>
+                    <set field="orderRevision" from="product.orderRevision"/>
+                    <set field="currencyUomId" from="product.currencyUomId"/>
+                    <set field="productStoreId" from="product.productStoreId"/>
+                    <set field="salesChannelEnumId" from="product.salesChannelEnumId"/>
+                </then>
+            </if>
+         </actions>
+    </service>
+
+    <!-- 5.Finding all Order Header records with the grandTotal greater than 50.-->
+    <service verb="get" noun="OrderHeaders">
+        <out-parameters>
+            <parameter name="orderCount" type="list"/>
+        </out-parameters>
+        <actions>
+            <set field="orderCount" from="[]"/>
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
+            </entity-find>
+            <iterate list="ordersList">
+                <if condition="grandTotal &gt; 50">
+                    <then>
+                        <set field="orderCount" from="orderCount"/>
+                    </then>
+                </if>
+            </iterate>
+        </actions>
+    </service>
+
+
+    <!--   6.Listing all Order Item details for the order with orderId, 100102 and orderPartSeqId, 01.-->
+    <service verb="get" noun="OrderItems">
+        <in-parameters>
+            <parameter name="orderId"/>
+            <parameter name="orderPartSeqId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderItemList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderItem" list="orderItemList">
+                <econdition field-name="orderId"/>
+                <econdition field-name="orderPartSeqId"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!--  8.Find all Order Part records assigned to the facility with ZIRET_WH value-->
+
+    <service verb="get" noun="OrderPartData">
+        <in-parameters>
+            <parameter name="facilityId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderId"/>
+            <parameter name="orderPartSeqId"/>
+            <parameter name="facilityId"/>
+            <parameter name="partName"/>
+            <parameter name="customerPartyId"/>
+        </out-parameters>
+        <actions>
+            <entity-find-one entity-name="mantle.order.OrderPart" value-field="order"/>
+            <set field="orderId" from="order.orderId"/>
+            <set field="orderPartSeqId" from="order.orderPartSeqId"/>
+            <set field="statusId" from="order.statusId"/>
+            <set field="vendorPartyId" from="order.vendorPartyId"/>
+            <set field="customerPartyId" from="order.customerPartyId"/>
+            <set field="facilityId" from="order.facilityId"/>
+            <set field="carrierPartyId" from="order.carrierPartyId"/>
+            <set field="shipmentMethodEnumId" from="order.shipmentMethodEnumId"/>
+            <set field="partTotal" from="order.partTotal"/>
+            <set field="priority" from="order.priority"/>
+            <set field="disableShippingCalc" from="order.disableShippingCalc"/>
+            <set field="disableTaxCalc" from="order.disableTaxCalc"/>
+        </actions>
+    </service>
+
+    <!--   9.Finding the count of order parts for the customer Party Id, “CustJqp”.-->
+
+    <service verb="get" noun="OrderPartsCount">
+        <in-parameters>
+            <parameter name="customerPartyId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderPartSeqId" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find-count entity-name="mantle.order.OrderPart">
+                <econdition field-name="customerPartyId"/>
+            </entity-find-count>
+        </actions>
+    </service>
+
+    <!--10.Finding all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”.-->
+
+    <service verb="get" noun="OrderPartsInfo">
+        <in-parameters>
+            <parameter name="shipmentMethodEnumId"/>
+            <parameter name="facilityId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderPartsList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsList"/>
+            <set field="products" from="[]"/>
+            <iterate list="orderPartsList" entry="product">
+                <if condition="shipmentMethodEnumId=='ShtMthGround' &amp;&amp; facilityId=='ZIRET_WH' ">
+                    <then>
+                        <set field="orderId" from="product.orderId"/>
+                        <set field="orderPartSeqId" from="product.orderPartSeqId"/>
+                        <set field="statusId" from="product.statusId"/>
+                        <set field="vendorPartyId" from="product.vendorPartyId"/>
+                        <set field="customerPartyId" from="product.customerPartyId"/>
+                        <set field="facilityId" from="product.facilityId"/>
+                        <set field="carrierPartyId" from="product.carrierPartyId"/>
+                        <set field="shipmentMethodEnumId" from="product.shipmentMethodEnumId"/>
+                        <set field="partTotal" from="product.partTotal"/>
+                        <set field="priority" from="product.priority"/>
+                        <set field="disableShippingCalc" from="product.disableShippingCalc"/>
+                        <set field="disableTaxCalc" from="product.disableTaxCalc"/>
+                    </then>
+                </if>
+            </iterate>
+        </actions>
+    </service>
+</services>
