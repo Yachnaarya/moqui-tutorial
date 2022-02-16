@@ -4,15 +4,12 @@
 
     <!--@1.Finding all Person records for all females-->
     <service verb="get" noun="FemalePersons">
-        <in-parameters>
-            <parameter name="gender" required="true"/>
-        </in-parameters>
         <out-parameters>
             <parameter name="personList" type="list"/>
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.party.Person" list="personList">
-                <econdition field-name="gender"/>
+                <econdition field-name="gender" value="F"/>
             </entity-find>
         </actions>
     </service>
@@ -20,15 +17,12 @@
     <!-- @2.Listing  the Person details with MarsMarried marital status.-->
 
     <service verb="get" noun="Persons">
-        <in-parameters>
-            <parameter name="maritalStatusEnumId"/>
-        </in-parameters>
         <out-parameters>
             <parameter name="personList" type="list"/>
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.party.Person" list="personList">
-                <econdition field-name="maritalStatusEnumId"/>
+                <econdition field-name="maritalStatusEnumId" value="MarsMarried"/>
             </entity-find>
         </actions>
     </service>
@@ -59,7 +53,7 @@
             <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
             <set field="order" from="[]"/>
             <iterate list="ordersList" entry="order">
-              <set field="orderId" from="order.orderId"/>
+                <set field="orderId" from="order.orderId"/>
                 <set field="orderName" from="order.orderName"/>
                 <set field="placedDate" from="order.placedDate"/>
                 <set field="statusId" from="order.statusId"/>
@@ -76,7 +70,6 @@
             </iterate>
         </actions>
     </service>
-
 
     <!-- 5.Finding all Order Header records with the grandTotal greater than 50.-->
 
@@ -100,21 +93,15 @@
         </actions>
     </service>
 
-
-
     <!-- @  6.Listing all Order Item details for the order with orderId, 100102 and orderPartSeqId, 01.-->
     <service verb="get" noun="OrderItems">
-        <in-parameters>
-            <parameter name="orderId"/>
-            <parameter name="orderPartSeqId"/>
-        </in-parameters>
         <out-parameters>
             <parameter name="orderItemList" type="list"/>
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderItem" list="orderItemList">
-                <econdition field-name="orderId"/>
-                <econdition field-name="orderPartSeqId"/>
+                <econdition field-name="orderId" value="100102"/>
+                <econdition field-name="orderPartSeqId" value="01"/>
             </entity-find>
         </actions>
     </service>
@@ -152,15 +139,12 @@
     <!--  @ 9.Finding the count of order parts for the customer Party Id, “CustJqp”.-->
 
     <service verb="get" noun="OrderPartsCount">
-        <in-parameters>
-            <parameter name="customerPartyId"/>
-        </in-parameters>
         <out-parameters>
-            <parameter name="orderPartSeqId" type="list"/>
+            <parameter name="orderPartsCount" type="list"/>
         </out-parameters>
         <actions>
-            <entity-find entity-name="mantle.order.OrderPart" list="orderPartSeqId">
-                <econdition field-name="customerPartyId"/>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsCount">
+                <econdition field-name="customerPartyId" value="CustJqp"/>
             </entity-find>
         </actions>
     </service>
@@ -168,17 +152,13 @@
     <!--@10.Finding all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”.-->
 
     <service verb="get" noun="OrderPartsInfo">
-        <in-parameters>
-            <parameter name="shipmentMethodEnumId"/>
-            <parameter name="facilityId"/>
-        </in-parameters>
         <out-parameters>
             <parameter name="orderPartList" type="list"/>
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderPart" list="orderPartList">
-                <econdition field-name="shipmentMethodEnumId"/>
-                <econdition field-name="facilityId"/>
+                <econdition field-name="shipmentMethodEnumId" value="ShtMthGround"/>
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
             </entity-find>
         </actions>
     </service>
