@@ -69,14 +69,14 @@
 
             <if condition="placedDate">
                 <then>
-                    <set field="orderId" from="product.orderId"/>
-                    <set field="orderName" from="product.orderName"/>
-                    <set field="placedDate" from="product.placedDate"/>
-                    <set field="statusId" from="product.statusId"/>
-                    <set field="orderRevision" from="product.orderRevision"/>
-                    <set field="currencyUomId" from="product.currencyUomId"/>
-                    <set field="productStoreId" from="product.productStoreId"/>
-                    <set field="salesChannelEnumId" from="product.salesChannelEnumId"/>
+                    <set field="orderId" from="order.orderId"/>
+                    <set field="orderName" from="order.orderName"/>
+                    <set field="placedDate" from="order.placedDate"/>
+                    <set field="statusId" from="order.statusId"/>
+                    <set field="orderRevision" from="order.orderRevision"/>
+                    <set field="currencyUomId" from="order.currencyUomId"/>
+                    <set field="productStoreId" from="order.productStoreId"/>
+                    <set field="salesChannelEnumId" from="order.salesChannelEnumId"/>
                 </then>
             </if>
          </actions>
