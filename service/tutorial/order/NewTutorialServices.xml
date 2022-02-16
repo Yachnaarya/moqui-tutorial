@@ -41,7 +41,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
-                <order-by field-name="placedDate"/>
+                <order-by field-name=" -placedDate"/>
             </entity-find>
         </actions>
     </service>
@@ -53,33 +53,13 @@
             <parameter name="orderId" required="true"/>
         </in-parameters>
         <out-parameters>
-            <parameter name="orderDetails" type="list"/>
-            <parameter name="orderId"/>
-            <parameter name="orderName"/>
-            <parameter name="placedDate"/>
-            <parameter name="statusId"/>
-            <parameter name="orderRevision"/>
-            <parameter name="currencyUomId"/>
-            <parameter name="productStoreId"/>
-            <parameter name="salesChannelEnumId"/>
+            <parameter name="ordersList" type="list"/>
         </out-parameters>
         <actions>
-            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
-            <set field="products" from="[]"/>
-
-            <if condition="placedDate">
-                <then>
-                    <set field="orderId" from="order.orderId"/>
-                    <set field="orderName" from="order.orderName"/>
-                    <set field="placedDate" from="order.placedDate"/>
-                    <set field="statusId" from="order.statusId"/>
-                    <set field="orderRevision" from="order.orderRevision"/>
-                    <set field="currencyUomId" from="order.currencyUomId"/>
-                    <set field="productStoreId" from="order.productStoreId"/>
-                    <set field="salesChannelEnumId" from="order.salesChannelEnumId"/>
-                </then>
-            </if>
-         </actions>
+            <entity-find-one entity-name="mantle.order.OrderHeader" value-field="ordersList">
+                <field-map field-name="orderId"/>
+            </entity-find-one>
+        </actions>
     </service>
 
     <!-- 5.Finding all Order Header records with the grandTotal greater than 50.-->
@@ -159,13 +139,13 @@
             <parameter name="orderPartSeqId" type="list"/>
         </out-parameters>
         <actions>
-            <entity-find-count entity-name="mantle.order.OrderPart">
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartSeqId">
                 <econdition field-name="customerPartyId"/>
-            </entity-find-count>
+            </entity-find>
         </actions>
     </service>
 
-    <!--10.Finding all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”.-->
+    <!--@10.Finding all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”.-->
 
     <service verb="get" noun="OrderPartsInfo">
         <in-parameters>
@@ -173,29 +153,13 @@
             <parameter name="facilityId"/>
         </in-parameters>
         <out-parameters>
-            <parameter name="orderPartsList" type="list"/>
+            <parameter name="orderPartList" type="list"/>
         </out-parameters>
         <actions>
-            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsList"/>
-            <set field="products" from="[]"/>
-            <iterate list="orderPartsList" entry="product">
-                <if condition="shipmentMethodEnumId=='ShtMthGround' &amp;&amp; facilityId=='ZIRET_WH' ">
-                    <then>
-                        <set field="orderId" from="product.orderId"/>
-                        <set field="orderPartSeqId" from="product.orderPartSeqId"/>
-                        <set field="statusId" from="product.statusId"/>
-                        <set field="vendorPartyId" from="product.vendorPartyId"/>
-                        <set field="customerPartyId" from="product.customerPartyId"/>
-                        <set field="facilityId" from="product.facilityId"/>
-                        <set field="carrierPartyId" from="product.carrierPartyId"/>
-                        <set field="shipmentMethodEnumId" from="product.shipmentMethodEnumId"/>
-                        <set field="partTotal" from="product.partTotal"/>
-                        <set field="priority" from="product.priority"/>
-                        <set field="disableShippingCalc" from="product.disableShippingCalc"/>
-                        <set field="disableTaxCalc" from="product.disableTaxCalc"/>
-                    </then>
-                </if>
-            </iterate>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartList">
+                <econdition field-name="shipmentMethodEnumId"/>
+                <econdition field-name="facilityId"/>
+            </entity-find>
         </actions>
     </service>
 </services>
