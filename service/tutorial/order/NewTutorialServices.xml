@@ -51,23 +51,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
-            <set field="order" from="[]"/>
-            <iterate list="ordersList" entry="order">
-                <set field="orderId" from="order.orderId"/>
-                <set field="orderName" from="order.orderName"/>
-                <set field="placedDate" from="order.placedDate"/>
-                <set field="statusId" from="order.statusId"/>
-                <set field="orderRevision" from="order.orderRevision"/>
-                <set field="currencyUomId" from="order.currencyUomId"/>
-                <set field="productStoreId" from="order.productStoreId"/>
-                <set field="salesChannelEnumId" from="order.salesChannelEnumId"/>
-                <set field="grandTotal" from="order.grandTotal"/>
-                <set field="orderMap"
-                     from="[orderId:orderId,orderName:orderName,placedDate:placedDate,statusId:statusId,orderRevision:
-                     orderRevision,currencyUomId:currencyUomId,productStoreId:productStoreId,salesChannelEnumId:salesChannelEnumId
-                     ,grandTotal:grandTotal]"/>
-                <set field="order" from="order+orderMap"/>
-            </iterate>
+            <econdition field-name="orderId" value="100152"/>
         </actions>
     </service>
 
@@ -79,9 +63,8 @@
         </out-parameters>
         <actions>
             <set field="orderHeaderDetails" from="[]"/>
-            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
-            </entity-find>
-            <iterate list="ordersList" entry="order">
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
+                <iterate list="ordersList" entry="order">
                 <if condition="order.grandTotal &gt; 50">
                     <then>
                         <set field="orderHeaderDetails" from="[orderId:orderId,orderName:order.orderName,placedDate:order.placedDate,statusId:order.statusId,orderRevision:
@@ -113,26 +96,12 @@
             <parameter name="facilityId" required="true"/>
         </in-parameters>
         <out-parameters>
-            <parameter name="orderId"/>
-            <parameter name="orderPartSeqId"/>
-            <parameter name="facilityId"/>
-            <parameter name="partName"/>
-            <parameter name="customerPartyId"/>
+            <parameter name="OrderPartData" type="list"/>
         </out-parameters>
         <actions>
-            <entity-find-one entity-name="mantle.order.OrderPart" value-field="order"/>
-            <set field="orderId" from="order.orderId"/>
-            <set field="orderPartSeqId" from="order.orderPartSeqId"/>
-            <set field="statusId" from="order.statusId"/>
-            <set field="vendorPartyId" from="order.vendorPartyId"/>
-            <set field="customerPartyId" from="order.customerPartyId"/>
-            <set field="facilityId" from="order.facilityId"/>
-            <set field="carrierPartyId" from="order.carrierPartyId"/>
-            <set field="shipmentMethodEnumId" from="order.shipmentMethodEnumId"/>
-            <set field="partTotal" from="order.partTotal"/>
-            <set field="priority" from="order.priority"/>
-            <set field="disableShippingCalc" from="order.disableShippingCalc"/>
-            <set field="disableTaxCalc" from="order.disableTaxCalc"/>
+            <entity-find entity-name="mantle.order.OrderPart" list="OrderPartData">
+            <econdition field-name="facilityId" value="ZIRET_WH"/>
+            </entity-find>
         </actions>
     </service>
 
@@ -140,12 +109,12 @@
 
     <service verb="get" noun="OrderPartsCount">
         <out-parameters>
-            <parameter name="orderPartsCount" type="list"/>
+            <parameter name="hitCount"/>
         </out-parameters>
         <actions>
-            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsCount">
+            <entity-find-count entity-name="mantle.order.OrderPart" count-field="hitCount" >
                 <econdition field-name="customerPartyId" value="CustJqp"/>
-            </entity-find>
+            </entity-find-count>
         </actions>
     </service>
 
