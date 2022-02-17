@@ -51,7 +51,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
-            <econdition field-name="orderId" value="100152"/>
+            <econdition field-name="orderId"/>
         </actions>
     </service>
 
@@ -62,17 +62,10 @@
             <parameter name="orderHeaderDetails" type="list"/>
         </out-parameters>
         <actions>
-            <set field="orderHeaderDetails" from="[]"/>
-            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList"/>
-                <iterate list="ordersList" entry="order">
-                <if condition="order.grandTotal &gt; 50">
-                    <then>
-                        <set field="orderHeaderDetails" from="[orderId:orderId,orderName:order.orderName,placedDate:order.placedDate,statusId:order.statusId,orderRevision:
-                     order.orderRevision,currencyUomId:order.currencyUomId,productStoreId:order.productStoreId,salesChannelEnumId:order.salesChannelEnumId
-                     ,grandTotal:order.grandTotal]"/>
-                    </then>
-                </if>
-            </iterate>
+
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
+                <econdition field-name="grandTotal" operaor="greater" from="50"/>
+            </entity-find>
         </actions>
     </service>
 
