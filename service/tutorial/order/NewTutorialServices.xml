@@ -89,6 +89,19 @@
         </actions>
     </service>
 
+  <!--7 Find all Order Parts with partTotal less than equals to 20.-->
+
+    <service verb="get" noun="OrderParts">
+        <out-parameters>
+            <parameter name="orderPartDetails" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="orderId" operaor="less" from="20"/>
+            </entity-find>
+        </actions>
+    </service>
+
     <!-- @ 8.Find all Order Part records assigned to the facility with ZIRET_WH value-->
 
     <service verb="get" noun="OrderPartData">
