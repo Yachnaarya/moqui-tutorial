@@ -4,7 +4,6 @@
           xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-2.1.xsd"
           name="tutorial" displayName="Order-Component REST API" version="2.0.0"
           require-authentication="anonymous-all">
-
     <resource name="orders">
         <method type="post">
             <service name="tutorial.order.NewTutorialServices.create#OrderData"/>
