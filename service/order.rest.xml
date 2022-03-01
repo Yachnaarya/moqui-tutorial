@@ -9,7 +9,7 @@
             <service name="tutorial.order.NewTutorialServices.create#OrderData"/>
         </method>
         <method type="post">
-            <service name="tutorial.order.NewTutorialServices.add#orderAdd"/>
+            <service name="tutorial.order.NewTutorialServices.add#OrderItems"/>
         </method>
         <method type="get">
             <service name="tutorial.order.NewTutorialServices.get#OrderList"/>
