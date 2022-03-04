@@ -6,15 +6,16 @@
           require-authentication="anonymous-all">
     <resource name="orders">
         <method type="post">
-            <service name="tutorial.order.OrderServices.create#OrderData"/>
+            <service name="tutorial.order.OrderServices.create#Order"/>
         </method>
-        <method type="post">
-            <service name="tutorial.order.OrderServices.add#OrderItems"/>
-        </method>
+
         <method type="get">
             <service name="tutorial.order.OrderServices.get#OrderList"/>
         </method>
         <id name="orderId">
+            <method type="post">
+                <service name="tutorial.order.OrderServices.add#OrderPart"/>
+            </method>
             <method type="get">
                 <service name="tutorial.order.OrderServices.get#orderOne"/>
             </method>
